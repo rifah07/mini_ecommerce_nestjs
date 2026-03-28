@@ -11,10 +11,10 @@ export class OrderItem extends BaseEntity {
 
   @ManyToOne(() => Product, (product) => product.orderItems, { nullable: true })
   @JoinColumn()
-  product: Product | null; // Nullable — product may be deleted later
+  product: Product | null; // Nullable -product may be deleted later
 
   @Column()
-  productName: string; // Snapshot — preserved even if product deleted
+  productName: string; // Snapshot -preserved even if product deleted
 
   @Column({ type: 'int' })
   quantity: number;
