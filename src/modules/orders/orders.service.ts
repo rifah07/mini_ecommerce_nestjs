@@ -17,13 +17,13 @@ import {
   UpdateOrderStatusDto,
 } from './dto/order.dto';
 
-// ─── Valid status transitions ────────────────────────────────────────────────
+//Valid status transitions
 const TRANSITIONS: Partial<Record<OrderStatus, OrderStatus[]>> = {
   [OrderStatus.PENDING]: [OrderStatus.SHIPPED, OrderStatus.CANCELLED],
   [OrderStatus.SHIPPED]: [OrderStatus.DELIVERED],
 };
 
-// ─── Fraud limits ─────────────────────────────────────────────────────────────
+//Fraud limits
 const CANCEL_LIMIT_HOURS = 24;
 const CANCEL_LIMIT_COUNT = 3;
 const MIN_ORDERS_FOR_RATE = 5;
@@ -40,8 +40,7 @@ export class OrdersService {
     private dataSource: DataSource,
   ) {}
 
-  // ─── Place Order (from cart or direct) ───────────────────────────────────────
-
+  // Place Order (from cart or direct)
   async placeOrder(userId: string, dto: PlaceOrderDto) {
     return this.dataSource.transaction(async (em) => {
       let rawItems: { productId: string; quantity: number }[];
@@ -112,7 +111,7 @@ export class OrdersService {
     });
   }
 
-  // ─── My Orders ────────────────────────────────────────────────────────────────
+  // My Orders
 
   findMyOrders(userId: string) {
     return this.orderRepo.find({
@@ -125,13 +124,13 @@ export class OrdersService {
   async findMyOrder(userId: string, orderId: string) {
     const order = await this.orderRepo.findOne({
       where: { id: orderId, user: { id: userId } },
-      relations: ['items'],
+      relations: ['items', 'items.product'],
     });
     if (!order) throw new NotFoundException('Order not found');
     return order;
   }
 
-  // ─── Cancel Order ─────────────────────────────────────────────────────────────
+  //cancel Order
 
   async cancelOrder(userId: string, orderId: string, dto: CancelOrderDto) {
     const order = await this.findMyOrder(userId, orderId);
@@ -162,7 +161,7 @@ export class OrdersService {
     });
   }
 
-  // ─── Admin ────────────────────────────────────────────────────────────────────
+  //Admin
 
   findAllOrders() {
     return this.orderRepo.find({
@@ -174,7 +173,7 @@ export class OrdersService {
   async findOrderById(id: string) {
     const order = await this.orderRepo.findOne({
       where: { id },
-      relations: ['user', 'items'],
+      relations: ['user', 'items', 'items.product'],
     });
     if (!order) throw new NotFoundException('Order not found');
     return order;
@@ -187,8 +186,7 @@ export class OrdersService {
     return this.orderRepo.save(order);
   }
 
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
-
+  //Helpers
   private assertTransition(current: OrderStatus, next: OrderStatus) {
     const allowed = TRANSITIONS[current] ?? [];
     if (!allowed.includes(next)) {
