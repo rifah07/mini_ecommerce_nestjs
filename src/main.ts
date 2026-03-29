@@ -30,19 +30,13 @@ async function bootstrap() {
     }),
   );
 
-  if (isDev) {
-    const doc = new DocumentBuilder()
-      .setTitle('Mini E-Commerce API')
-      .setDescription('Production-grade NestJS + MySQL REST API')
-      .setVersion('1.0')
-      .addCookieAuth('access_token')
-      .build();
-    SwaggerModule.setup(
-      'api/docs',
-      app,
-      SwaggerModule.createDocument(app, doc),
-    );
-  }
+  const doc = new DocumentBuilder()
+    .setTitle('Mini E-Commerce API')
+    .setDescription('Production-grade NestJS + MySQL REST API')
+    .setVersion('1.0')
+    .addCookieAuth('access_token')
+    .build();
+  SwaggerModule.setup('api/docs', app, SwaggerModule.createDocument(app, doc));
 
   await app.listen(port);
   console.log(`Server running on http://localhost:${port}`);
