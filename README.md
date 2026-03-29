@@ -41,6 +41,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
 Server starts at `http://localhost:3000` and Swagger docs at `http://localhost:3000/api/docs`.
+Live API-Doc: https://mini-ecommerce-nestjs.onrender.com/api/docs/
 
 ## Environment variables
 
