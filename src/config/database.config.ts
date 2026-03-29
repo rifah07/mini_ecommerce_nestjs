@@ -10,5 +10,9 @@ export const typeOrmConfig = (config: ConfigService): TypeOrmModuleOptions => ({
   database: config.get('db.name'),
   autoLoadEntities: true,
   synchronize: config.get('nodeEnv') !== 'production',
+  ssl:
+    config.get('nodeEnv') === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
   logging: config.get('nodeEnv') === 'development',
 });
