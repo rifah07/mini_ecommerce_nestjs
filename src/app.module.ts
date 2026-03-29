@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
+import { AppController } from './app.controller';
 import appConfig from './config/app.config';
 import { typeOrmConfig } from './config/database.config';
 import { winstonConfig } from './config/logger.config';
@@ -34,6 +35,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
     CartModule,
     OrdersModule,
   ],
+  controllers: [AppController],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
